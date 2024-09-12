@@ -9,10 +9,10 @@
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
   "║    Menú Principal     ║\n"                                              \
-  "║ 1. Modelo Cola        ║\n"                                               \
-  "║ 2. Modelo Árbol       ║\n"                                              \
-  "║ 3. Créditos           ║\n"                                              \
-  "║ 4. Créditos           ║\n"                                              \
+  "║ 1. Ancho Primero      ║\n"                                               \
+  "║ 2. Greedy             ║\n"                                              \
+  "║ 3. Solucionador IDS   ║\n"                                              \
+  "║ 4. IDS Heuristica     ║\n"                                              \
   "║ 5. Créditos           ║\n"                                              \
   "║ 6. Salir              ║\n"                                               \
   "╚═══════════════════════╝\n" \
@@ -22,6 +22,8 @@
 #define CREDITOS                                                                                    \
   "╔═════════════════════════════╗\n" \
   "║          Créditos           ║\n"                                                          \
+  "║ Christopher Acosta Madrigal ║\n"                                                           \
+  "║ Christopher Acosta Madrigal ║\n"                                                           \
   "║ Christopher Acosta Madrigal ║\n"                                                           \
   "╚═════════════════════════════╝\n"
 
@@ -34,19 +36,10 @@ class Menu {
   ~Menu();
 
   void run();
-  void runCola();
-  void runArbol();
 
   int mostrarPrincipal();
-  int mostrarOperadoresArbol();
-  int mostrarOperadoresCola();
   void mostrarCreditos();
-  void mostrarColaActual();
-  void mostrarArbolActual();
 
-  void crearArbolAuto(int64_t levelsToCreate, int64_t NumHijos);
-
-// Algoritmos
 
 };
 
