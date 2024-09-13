@@ -29,22 +29,25 @@ void Menu::run() {
     switch (opcion) {
     case 1:
       std::cout << "Ancho " << std::endl;
-      algoritmos->anchoPrimero();
+      algoritmos.anchoPrimero();
       break;
     case 2:
       std::cout << "Greedy" << std::endl;
-      algoritmos->greedy();
+      algoritmos.greedy();
       break;
     case 3:
       std::cout << "Solucionador IDS" << std::endl;
-      algoritmos->solucionadorIDS();
+      algoritmos.solucionadorIDS();
       break;
     case 4:
       std::cout << "IDS Heuristica" << std::endl;
-      algoritmos->IDSHeuristica();
+      algoritmos.IDSHeuristica();
       break;
     case 5:
       mostrarCreditos();
+    case 6:
+      std::cout << "Saliendo..." << std::endl;
+      break;
     default:
       std::cout << "Opción inválida." << std::endl;
       break;
