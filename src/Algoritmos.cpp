@@ -45,7 +45,12 @@ void Algoritmos::anchoPrimero() {
     while (!q.empty()) {
         vector<int> siguiente = q.front(); q.pop();
         
-        if (siguiente == objetivo) return;
+        if (siguiente == objetivo) {
+            auto t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+            std::cout << ms_double.count() << "ms\n";
+            return;
+        }
 
         vector<vector<int>> movimientos = posiblesMovimientos(siguiente);
         for (auto movimiento : movimientos) {
@@ -54,11 +59,6 @@ void Algoritmos::anchoPrimero() {
             q.push(movimiento); 
         }
     }
-
-    auto t2 = std::chrono::high_resolution_clock::now();
-
-    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-    std::cout << ms_double.count() << "ms\n";
 }
 
 void Algoritmos::shuffle() {
