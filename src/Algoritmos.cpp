@@ -36,29 +36,40 @@ vector<vector<int>> Algoritmos::posiblesMovimientos(const vector<int>& actual) {
     return movimientos;
 }
 
-void Algoritmos::anchoPrimero() {
+bool Algoritmos::anchoPrimero() {
     auto t1 = std::chrono::high_resolution_clock::now();
-
-    queue<vector<int>> q;
+    // Revisar si estado inicial es solucion
+    if (tablero == objetivo) {
+        auto t2 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+        return true; 
+    }
+    // Algoritmo
+    queue<vector<int>> frontera;
     set<vector<int>> visitados;
-    q.push(tablero);
-    while (!q.empty()) {
-        vector<int> siguiente = q.front(); q.pop();
-        
-        if (siguiente == objetivo) {
-            auto t2 = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-            std::cout << ms_double.count() << "ms\n";
-            return;
-        }
-
+    frontera.push(tablero);
+    while (!frontera.empty()) {
+        vector<int> siguiente = frontera.front(); frontera.pop();
         vector<vector<int>> movimientos = posiblesMovimientos(siguiente);
         for (auto movimiento : movimientos) {
+            // Revisar si alguno de los movimientos lleva al objetivo
+            if (movimiento == objetivo) {
+                auto t2 = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+                std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+                return true;
+            }
             if (visitados.find(movimiento) != visitados.end()) continue;
             visitados.insert(movimiento);
-            q.push(movimiento); 
+            frontera.push(movimiento); 
         }
     }
+    // Si llega aqui, no se encontro solucion
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+    std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+    return false;
 }
 
 void Algoritmos::shuffle() {
