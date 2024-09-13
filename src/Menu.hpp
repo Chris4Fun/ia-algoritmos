@@ -23,7 +23,7 @@
   "╔═════════════════════════════╗\n" \
   "║          Créditos           ║\n"                                                          \
   "║ Christopher Acosta Madrigal ║\n"                                                           \
-  "║ Christopher Acosta Madrigal ║\n"                                                           \
+  "║ Alberto González Avendaño   ║\n"                                                           \
   "║ Christopher Acosta Madrigal ║\n"                                                           \
   "╚═════════════════════════════╝\n"
 
