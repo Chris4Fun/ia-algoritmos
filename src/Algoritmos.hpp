@@ -16,6 +16,9 @@ class Algoritmos {
 
   void shuffle();
 
+  // Auxiliares
+  int iterativeDeepeningDfs(vector<int> estado, set<vector<int>> &visitados, int depth);
+
   // Algoritmos
   bool anchoPrimero();
   void greedy();

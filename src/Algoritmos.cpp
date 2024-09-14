@@ -78,7 +78,53 @@ void Algoritmos::shuffle() {
 void Algoritmos::greedy() {
 }
 
+int Algoritmos::iterativeDeepeningDfs(vector<int> estado, set<vector<int>> &visitados, int depth) {
+	if(depth == 0) {
+		return false;
+	}
+
+	// Reviso si el estado actual es una solucion
+	if(estado == objetivo) {
+		return true;
+	}
+
+	// Añado este estado no visitado a los nodos visitados
+	visitados.insert(estado);
+
+	// Obtener los movimientos posibles
+	vector<vector<int>> movimientos = posiblesMovimientos(estado);
+
+	int resultado = false;
+	// Itero por los posibles movimientos revisando si ya ha sido visitado ese nodo.
+	for(auto movimiento : movimientos) {
+		if(visitados.find(movimiento) == visitados.end()) {
+			resultado = iterativeDeepeningDfs(movimiento, visitados, depth - 1);
+			if(resultado) {
+				return resultado;
+			}
+		}
+	}
+
+	return resultado;
+}
+
 void Algoritmos::solucionadorIDS() {
+    int encontroSolucion = 0;
+	int depth = 1;
+	auto t1 = std::chrono::high_resolution_clock::now();
+	while(!encontroSolucion) {
+		set<vector<int>> visitados;
+		encontroSolucion = iterativeDeepeningDfs(tablero, visitados, depth);
+		++depth;
+	}
+	auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+
+	if(encontroSolucion) {
+		std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+	} else {
+		std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+	}
 }
 
 void Algoritmos::IDSHeuristica() {
