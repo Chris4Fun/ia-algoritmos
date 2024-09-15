@@ -1,13 +1,4 @@
 #include "Menu.hpp"
-#include "Algoritmos.hpp"
-
-#include <cmath>
-#include <ctime>
-#include <sched.h>
-#include <time.h>
-#include <cstdint>
-#include <ostream>
-#include <unistd.h>
 
 Menu::Menu() {
 }
@@ -44,8 +35,14 @@ void Menu::run() {
       algoritmos.IDSHeuristica();
       break;
     case 5:
-      mostrarCreditos();
+      std::cout << "Generando tablero aleatorio..." << std::endl;
+      algoritmos.shuffle();
+      algoritmos.printBoard();
+      break;
     case 6:
+      mostrarCreditos();
+      break;
+    case 7:
       std::cout << "Saliendo..." << std::endl;
       break;
     default:
