@@ -49,7 +49,7 @@ void Menu::run() {
       std::cout << "Opción inválida." << std::endl;
       break;
     }
-  } while (opcion != 6);
+  } while (opcion != 7);
 }
 
 

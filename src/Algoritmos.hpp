@@ -20,6 +20,9 @@ class Algoritmos {
   vector<int> tablero = {3, 2, 1, 4, 8, 6, 7, 5, 0};
 
   vector<vector<int>> posiblesMovimientos(const vector<int>&);
+
+  int heuristicaManhattan(const vector<int>& movimientoActual);
+
  public:
   Algoritmos();
   ~Algoritmos();
