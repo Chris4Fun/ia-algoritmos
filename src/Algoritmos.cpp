@@ -194,5 +194,42 @@ void Algoritmos::solucionadorIDS() {
 	}
 }
 
+int heuristicaManhattan(const vector<int>& movimientoActual) {
+    int distance = 0;
+
+    for (size_t i = 0; i < movimientoActual.size(); ++i) {
+        int distanciaIndividual = abs(movimientoActual[i] - this->objectivo[i]);
+        distance += distanciaIndividual;
+    }
+    return distance;
+}
+
 void Algoritmos::IDSHeuristica() {
+    // Inicia el contador:
+    auto t1 = std::chrono::high_resolution_clock::now();
+
+    // Cola de prioridad para ordenar por la heuristica
+    std::priority_queue<std::pair<vector<int>, int>, std::vector<std::pair<vector<int>, int>>, less<int>> colaPrioridad;
+
+    while(true) {
+        // Itero por los posibles movimientos revisando si ya ha sido visitado ese nodo.
+        for (auto movimiento : movimientos)
+        {
+            if (visitados.find(movimiento) == visitados.end())
+            {
+                colaPrioridad.push({movimiento, heuristicaManhattan(movimiento)});
+            }
+        }
+    }
+
+    // Termina el contador
+	auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+
+	if(encontroSolucion) {
+		std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+	} else {
+		std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+	}
+
 }
