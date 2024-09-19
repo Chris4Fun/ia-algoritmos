@@ -21,20 +21,15 @@ class Algoritmos {
 
   vector<vector<int>> posiblesMovimientos(const vector<int>&);
 
-  int heuristicaManhattan(const vector<int>& movimientoActual);
-  bool dls(vector<int>& estado, int limite);
-
+  int heuristica(const vector<int>&);
+  bool dls(vector<int>&, int);
+  bool dlsHeuristica(vector<int>&, int, int);  
  public:
   Algoritmos();
   ~Algoritmos();
   void shuffle();
-  void asignarTablero(vector<int>&);
+  void asignarTablero(const vector<int>&);
   void imprimirTablero();
-
-  // Auxiliares
-  int idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
-                             std::set<std::vector<int>> visitados,
-                             int costo, int limite);
 
   // Algoritmos
   bool anchoPrimero();

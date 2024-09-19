@@ -51,7 +51,7 @@ void Algoritmos::shuffle() {
     std::shuffle(this->tablero.begin(), this->tablero.end(), random);
 }
 
-void Algoritmos::asignarTablero(vector<int>& otro) {
+void Algoritmos::asignarTablero(const vector<int>& otro) {
     for (int i = 0; i < 9; i++) {
         tablero[i] = otro[i];
     }
@@ -68,8 +68,10 @@ void Algoritmos::imprimirTablero() {
     }
     std::cout << std::endl;
 }
+
 // -----------------------------  Algoritmos  ----------------------------------
 
+// --- Ancho primero ---
 bool Algoritmos::anchoPrimero() {
     auto t1 = std::chrono::high_resolution_clock::now();
     // Revisar si estado inicial es solucion
@@ -107,6 +109,7 @@ bool Algoritmos::anchoPrimero() {
     return false;
 }
 
+// --- Ancho primero con heuristica ---
 bool Algoritmos::anchoPrimeroHeuristica() {
     // Inicia el contador:
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -151,10 +154,10 @@ bool Algoritmos::anchoPrimeroHeuristica() {
     return false;
 }
 
-
+// IDS
 bool Algoritmos::dls(vector<int>& estado, int limite) {
-    if (estado == objetivo) return true;
-    if (limite <= 0) return false;
+    if (estado == objetivo) return true;  // Si ya se encontro el objetivo
+    if (limite <= 0) return false;  // Si ya no se puede bajar mas
     vector<vector<int>> movimientos = posiblesMovimientos(estado);
     for (auto &movimiento : movimientos) {
         if (dls(movimiento, limite-1)) {
@@ -167,9 +170,9 @@ bool Algoritmos::dls(vector<int>& estado, int limite) {
 void Algoritmos::ids () {
     auto t1 = std::chrono::high_resolution_clock::now();
     // Numero de movimientos puede llegar a ser 31
-    const int profundidadMaxima = 32;
-    for (int i = 0; i <= profundidadMaxima; i++) {
-        if (dls(tablero,i)) {
+    const int MAXIMO = 32;
+    for (int nivel = 0; nivel <= MAXIMO; nivel++) {
+        if (dls(tablero, nivel)) {
             auto t2 = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> ms_double = t2 - t1;
             std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
@@ -182,83 +185,56 @@ void Algoritmos::ids () {
     std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
 }
 
-int Algoritmos::idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
-                                       std::set<std::vector<int>> visitados,
-                                       int costo, int limite) {
-  // Se obtienen la heuristica y el costo (profundidad) del tablero actual
-  int heuristica = heuristicaManhattan(estadoActual);
-  int costoActual = costo + heuristica;
+// --- IDS* ---
 
-  // Si se pasa el costo actual se establece como el nuevo limite
-  if (costoActual > limite) {
-    return costoActual;
-  }
-
-  // Se encontro la solucion
-  if (estadoActual == this->objetivo) {
-    return -1;
-  }
-
-  //  Agrega el estado a visitados
-  visitados.insert(estadoActual);
-  // Obtener los movimientos posibles
-  vector<vector<int>> movimientos = posiblesMovimientos(estadoActual);
-
-  int minOverThreshold = INT_MAX;
-
-  for (auto &movimiento : movimientos) {
-    if (visitados.find(movimiento) == visitados.end()) {
-      int resultado = idsHeuristicaAuxiliar(movimiento, visitados, costo+1,
-                                            limite);
-      // Se encontro la solucion
-      if (resultado == -1) {
-        return -1;
-      }
-      if (resultado < minOverThreshold) {
-        minOverThreshold=resultado;
-      }
+int Algoritmos::heuristica(const vector<int>& movimiento) {
+    int correctos = 0;
+    for (int i = 0; i < 9; i++) {
+        if (movimiento[i] == objetivo[i]) correctos++;
     }
-  }
-  return minOverThreshold;
+    return correctos;
+}
+
+bool Algoritmos::dlsHeuristica(vector<int>& estado, int dist, int limite) {
+    if (estado == objetivo) return -1;  // Si ya se encontro el objetivo
+    int costo = heuristica(estado) + dist;  // Calcular nuevo costo
+    // Si el costo es mayor que el limite, se actualiza para encontrar el minimo
+    if (costo > limite) return costo;  
+    vector<vector<int>> movimientos = posiblesMovimientos(estado);
+    int minimo = INT_MAX;
+    for (auto &movimiento : movimientos) {
+        int resultado = dlsHeuristica(movimiento, dist+1, limite);
+        // Se encontro la solucion
+        if (resultado == -1) {
+            return -1;
+        }
+        minimo = min(minimo, resultado);
+    }
+    return false;
 }
 
 void Algoritmos::IDSHeuristica() {
-  // Usa el valor actual del tablero como limite
-  int limite = heuristicaManhattan(this->tablero);
-  // Inicia el contador:
-  auto t1 = std::chrono::high_resolution_clock::now();
-  // Guarda el resultado de la busqueda
-  int resultado = 0;
-
-  while(resultado != -1) {
-    // Crea un conjunto de los estados visitados
-    std::set<std::vector<int>> visitados;
+    auto t1 = std::chrono::high_resolution_clock::now();
+    // Usa el valor actual del tablero como limite inicial
+    int limite = heuristica(this->tablero);
+    const int MAXIMO = 32;
+    // Resultado de la busqueda
+    int resultado = 0;
+    while (limite <= MAXIMO) {
     // Se comienza la busqueda de tableros con mejor valor heuristico
-    resultado = idsHeuristicaAuxiliar(this->tablero, visitados, 0, limite);
+    resultado = dlsHeuristica(this->tablero, 0, limite);
+    if (resultado == -1) {
+        auto t2 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+        return;
+    }
     // Usa el nuevo valor como limite para la heuristica
     limite = resultado;
-  }
-
-  // Termina el contador
-  auto t2 = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-
-  if(resultado == -1) {
-    std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
-  } else {
-    std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
-  }
-
-}
-
-
-
-int Algoritmos::heuristicaManhattan(const vector<int>& movimientoActual) {
-    int distance = 0;
-
-    for (size_t i = 0; i < movimientoActual.size(); ++i) {
-        int distanciaIndividual = abs(movimientoActual[i] - this->objetivo[i]);
-        distance += distanciaIndividual;
     }
-    return distance;
+
+    // Si llega aqui, no se encontro solucion
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+    std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
 }
