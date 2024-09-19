@@ -22,9 +22,10 @@
   "║ 2. Ancho Primero con Heuristica ║\n"\
   "║ 3. Solucionador IDS             ║\n"\
   "║ 4. IDS Heuristica               ║\n"\
-  "║ 5. Generar tablero              ║\n"\
-  "║ 6. Créditos                     ║\n"\
-  "║ 7. Salir                        ║\n"\
+  "║ 5. Generar tablero aleatorio    ║\n"\
+  "║ 6. Asignar tablero              ║\n"\
+  "║ 7. Créditos                     ║\n"\
+  "║ 8. Salir                        ║\n"\
   "╚═════════════════════════════════╝\n"\
   "Seleccione una opción: "
 
@@ -33,13 +34,15 @@
   "╔═════════════════════════════╗\n"\
   "║          Créditos           ║\n"\
   "║ Christopher Acosta Madrigal ║\n"\
-  "║ Alberto González Avendaño   ║\n"\
+  "║ Alberto Gonzalez Avendaño   ║\n"\
   "║ Felipe Mena Rodríguez       ║\n"\
+  "║ Sebastian Sanchez Sandi     ║\n"\
   "╚═════════════════════════════╝\n"
 
 class Menu {
  private:
   double timeElapsed = 0;
+  void asignarTablero();
 
  public:
   Menu();

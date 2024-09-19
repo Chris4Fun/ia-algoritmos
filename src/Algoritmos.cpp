@@ -10,16 +10,6 @@ Algoritmos::~Algoritmos() {
 
 // --------------------------  Métodos de apoyo  -------------------------------
 
-void Algoritmos::shuffle() {
-    /* Genera semilla con time (el static cast se realiza para evitar problemas
-    con signos del tipo de dato time_t): */
-    unsigned seed = static_cast<unsigned>(std::time(NULL));
-    // Con la semilla se crea un generador de números aleatorios:
-    std::default_random_engine random(seed);
-    // Se barajean los elementos del vector:
-    std::shuffle(this->tablero.begin(), this->tablero.end(), random);
-}
-
 // Matrices a las que se puede llegar a partir de la actual
 vector<vector<int>> Algoritmos::posiblesMovimientos(const vector<int>& actual) {
     vector<vector<int>> movimientos;
@@ -37,9 +27,9 @@ vector<vector<int>> Algoritmos::posiblesMovimientos(const vector<int>& actual) {
         {iVacio, jVacio + 1}
     };
     // Genera los nuevos estados:
-    for (auto [i, j] : moves) {
+    for (auto &[i, j] : moves) {
         // Verifica que los movimientos estén dentro de los límites del tablero:
-        if ((i >= 0) && (i < 3) && (j >= 0) && (j < 3)) {
+        if ((i >= 0) and (i < 3) and (j >= 0) and (j < 3)) {
             // Convierte nuevamente a representación lineal:
             int nuevoIndiceVacio = i * 3 + j;
             // Crea el estado y lo guarda:
@@ -51,7 +41,23 @@ vector<vector<int>> Algoritmos::posiblesMovimientos(const vector<int>& actual) {
     return movimientos;
 }
 
-void Algoritmos::printBoard() {    
+void Algoritmos::shuffle() {
+    /* Genera semilla con time (el static cast se realiza para evitar problemas
+    con signos del tipo de dato time_t): */
+    unsigned seed = static_cast<unsigned>(std::time(NULL));
+    // Con la semilla se crea un generador de números aleatorios:
+    std::default_random_engine random(seed);
+    // Se barajean los elementos del vector:
+    std::shuffle(this->tablero.begin(), this->tablero.end(), random);
+}
+
+void Algoritmos::asignarTablero(vector<int>& otro) {
+    for (int i = 0; i < 9; i++) {
+        tablero[i] = otro[i];
+    }
+}
+
+void Algoritmos::imprimirTablero() {    
     // Imprime el tablero como una matriz de 3x3
     std::cout << "Tablero:\n";
     for (int i = 0; i < 9; ++i) {
@@ -148,7 +154,7 @@ bool Algoritmos::anchoPrimeroHeuristica() {
 
 bool Algoritmos::dls(vector<int>& estado, int limite) {
     if (estado == objetivo) return true;
-    if (limite == 0) return false;
+    if (limite <= 0) return false;
     vector<vector<int>> movimientos = posiblesMovimientos(estado);
     for (auto &movimiento : movimientos) {
         if (dls(movimiento, limite-1)) {
@@ -244,6 +250,8 @@ void Algoritmos::IDSHeuristica() {
   }
 
 }
+
+
 
 int Algoritmos::heuristicaManhattan(const vector<int>& movimientoActual) {
     int distance = 0;
