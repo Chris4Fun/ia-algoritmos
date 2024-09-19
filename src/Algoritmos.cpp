@@ -194,53 +194,68 @@ void Algoritmos::solucionadorIDS() {
 	}
 }
 
-void Algoritmos::IDSHeuristica() {
-  // Inicia el contador:
-  auto t1 = std::chrono::high_resolution_clock::now();
+int Algoritmos::idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
+                                       std::set<std::vector<int>> visitados,
+                                       int costo, int limite) {
+  // Se obtienen la heuristica y el costo (profundidad) del tablero actual
+  int heuristica = heuristicaManhattan(estadoActual);
+  int costoActual = costo + heuristica;
 
-  // Boolean para detenerse en caso de haber encotrado la solucion
-  bool encontroSolucion = false;
+  // Si se pasa el costo actual se establece como el nuevo limite
+  if (costoActual > limite) {
+    return costoActual;
+  }
 
-  // Cola de prioridad para ordenar por la heuristica
-  std::priority_queue<std::pair<int, std::vector<int>>,
-  std::vector<std::pair<int, std::vector<int>>>,
-  greater<std::pair<int, std::vector<int>>>> colaPrioridad;
+  // Se encontro la solucion
+  if (estadoActual == this->objetivo) {
+    return -1;
+  }
 
-  // Crea un conjunto de los estados visitados
-  std::set<std::vector<int>> visitados;
+  //  Agrega el estado a visitados
+  visitados.insert(estadoActual);
+  // Obtener los movimientos posibles
+  vector<vector<int>> movimientos = posiblesMovimientos(estadoActual);
 
-  // Pushea el primer estado
-  colaPrioridad.push({heuristicaManhattan(this->tablero), this->tablero});
+  int minOverThreshold = INT_MAX;
 
-  while(!colaPrioridad.empty() && !encontroSolucion) {
-    // Obtiene el primer elemento de la cola
-    std::vector<int> estadoActual = colaPrioridad.top().second;
-    colaPrioridad.pop();
-
-    // Se revisa si se encuentra en el objectivo
-    if (estadoActual == this->objetivo) {
-      encontroSolucion = true;
-    }
-
-    //  Agrega el estado a visitados
-    visitados.insert(estadoActual);
-    // Obtener los movimientos posibles
-    vector<vector<int>> movimientos = posiblesMovimientos(estadoActual);
-    // Itero por los posibles movimientos revisando si ya ha sido visitado ese nodo.
-    for (auto movimiento : movimientos)
-    {
-      if (visitados.find(movimiento) == visitados.end())
-      {
-        colaPrioridad.push({heuristicaManhattan(movimiento), movimiento });
+  for (auto movimiento : movimientos) {
+    if (visitados.find(movimiento) == visitados.end()) {
+      int resultado = idsHeuristicaAuxiliar(movimiento, visitados, costo+1,
+                                            limite);
+      // Se encontro la solucion
+      if (resultado == -1) {
+        return -1;
+      }
+      if (resultado < minOverThreshold) {
+        minOverThreshold=resultado;
       }
     }
+  }
+  return minOverThreshold;
+}
+
+void Algoritmos::IDSHeuristica() {
+  // Usa el valor actual del tablero como limite
+  int limite = heuristicaManhattan(this->tablero);
+  // Inicia el contador:
+  auto t1 = std::chrono::high_resolution_clock::now();
+  // Guarda el resultado de la busqueda
+  int resultado = 0;
+
+  while(resultado != -1) {
+    // Crea un conjunto de los estados visitados
+    std::set<std::vector<int>> visitados;
+    // Se comienza la busqueda de tableros con mejor valor heuristico
+    resultado = idsHeuristicaAuxiliar(this->tablero, visitados, 0, limite);
+    // Usa el nuevo valor como limite para la heuristica
+    limite = resultado;
   }
 
   // Termina el contador
   auto t2 = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 
-  if(encontroSolucion) {
+  if(resultado == -1) {
     std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
   } else {
     std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";

@@ -31,6 +31,10 @@ class Algoritmos {
   
   // Auxiliares
   int iterativeDeepeningDfs(vector<int> estado, set<vector<int>> &visitados, int depth);
+  int idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
+                             std::set<std::vector<int>> visitados,
+                             int costo, int limite);
+
 
   // Algoritmos
   bool anchoPrimero();
