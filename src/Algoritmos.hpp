@@ -23,7 +23,7 @@ class Algoritmos {
 
   int heuristica(const vector<int>&);
   bool dls(vector<int>&, int);
-  bool dlsHeuristica(vector<int>&, int, int);  
+  bool dlsHeuristica(vector<int>&, int&, int);  
  public:
   Algoritmos();
   ~Algoritmos();
@@ -35,7 +35,7 @@ class Algoritmos {
   bool anchoPrimero();
   bool anchoPrimeroHeuristica();
   void ids();
-  void IDSHeuristica();
+  void idsHeuristica();
 
 };
 

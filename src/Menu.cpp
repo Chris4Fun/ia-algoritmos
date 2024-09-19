@@ -32,7 +32,7 @@ void Menu::run() {
       break;
     case 4:
       std::cout << "IDS Heuristica" << std::endl;
-      algoritmos.IDSHeuristica();
+      algoritmos.idsHeuristica();
       break;
     case 5:
       std::cout << "Generando tablero aleatorio..." << std::endl;

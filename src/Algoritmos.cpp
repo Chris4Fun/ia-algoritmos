@@ -168,9 +168,9 @@ bool Algoritmos::dls(vector<int>& estado, int limite) {
 }
 
 void Algoritmos::ids () {
-    auto t1 = std::chrono::high_resolution_clock::now();
     // Numero de movimientos puede llegar a ser 31
     const int MAXIMO = 32;
+    auto t1 = std::chrono::high_resolution_clock::now();
     for (int nivel = 0; nivel <= MAXIMO; nivel++) {
         if (dls(tablero, nivel)) {
             auto t2 = std::chrono::high_resolution_clock::now();
@@ -190,49 +190,43 @@ void Algoritmos::ids () {
 int Algoritmos::heuristica(const vector<int>& movimiento) {
     int correctos = 0;
     for (int i = 0; i < 9; i++) {
-        if (movimiento[i] == objetivo[i]) correctos++;
+        if (movimiento[i] != objetivo[i]) correctos++;
     }
     return correctos;
 }
 
-bool Algoritmos::dlsHeuristica(vector<int>& estado, int dist, int limite) {
-    if (estado == objetivo) return -1;  // Si ya se encontro el objetivo
-    int costo = heuristica(estado) + dist;  // Calcular nuevo costo
-    // Si el costo es mayor que el limite, se actualiza para encontrar el minimo
-    if (costo > limite) return costo;  
+bool Algoritmos::dlsHeuristica(vector<int>& estado, int& costoMinimo, int limite) {
+    if (estado == objetivo) return true;  // Si ya se encontro el objetivo
+    if (limite <= 0) {
+        costoMinimo = min(costoMinimo, heuristica(estado));
+        return false;  // Si ya no se puede bajar mas
+    }
     vector<vector<int>> movimientos = posiblesMovimientos(estado);
-    int minimo = INT_MAX;
     for (auto &movimiento : movimientos) {
-        int resultado = dlsHeuristica(movimiento, dist+1, limite);
-        // Se encontro la solucion
-        if (resultado == -1) {
-            return -1;
+        if (dlsHeuristica(movimiento, costoMinimo, limite-1)) {
+            return true;
         }
-        minimo = min(minimo, resultado);
     }
     return false;
 }
 
-void Algoritmos::IDSHeuristica() {
-    auto t1 = std::chrono::high_resolution_clock::now();
-    // Usa el valor actual del tablero como limite inicial
-    int limite = heuristica(this->tablero);
+void Algoritmos::idsHeuristica() {
+    int nivel = 0, costoMinimo = INT_MAX;
+    bool encontrado = false;
     const int MAXIMO = 32;
-    // Resultado de la busqueda
-    int resultado = 0;
-    while (limite <= MAXIMO) {
-    // Se comienza la busqueda de tableros con mejor valor heuristico
-    resultado = dlsHeuristica(this->tablero, 0, limite);
-    if (resultado == -1) {
-        auto t2 = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
-        return;
+    auto t1 = std::chrono::high_resolution_clock::now();
+    while (!encontrado and nivel <= MAXIMO) {
+        encontrado = dlsHeuristica(tablero, costoMinimo, nivel);
+        if (encontrado) {
+            auto t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+            std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+            return;
+        }
+        // Actualizar nivel con nuevo costo minimo
+        nivel += costoMinimo;
+        costoMinimo = INT_MAX;
     }
-    // Usa el nuevo valor como limite para la heuristica
-    limite = resultado;
-    }
-
     // Si llega aqui, no se encontro solucion
     auto t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> ms_double = t2 - t1;
