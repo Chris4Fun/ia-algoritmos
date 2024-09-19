@@ -19,30 +19,33 @@ void Menu::run() {
     opcion = mostrarPrincipal();
     switch (opcion) {
     case 1:
-      std::cout << "Ancho " << std::endl;
+      std::cout << "Ancho primero" << std::endl;
       algoritmos.anchoPrimero();
       break;
     case 2:
-      std::cout << "Greedy" << std::endl;
-      algoritmos.greedy();
+      std::cout << "Ancho primero heuristica" << std::endl;
+      algoritmos.anchoPrimeroHeuristica();
       break;
     case 3:
       std::cout << "Solucionador IDS" << std::endl;
-      algoritmos.solucionadorIDS();
+      algoritmos.ids();
       break;
     case 4:
       std::cout << "IDS Heuristica" << std::endl;
-      algoritmos.IDSHeuristica();
+      algoritmos.idsHeuristica();
       break;
     case 5:
       std::cout << "Generando tablero aleatorio..." << std::endl;
       algoritmos.shuffle();
-      algoritmos.printBoard();
+      algoritmos.imprimirTablero();
       break;
     case 6:
-      mostrarCreditos();
+      asignarTablero();
       break;
     case 7:
+      mostrarCreditos();
+      break;
+    case 8:
       std::cout << "Saliendo..." << std::endl;
       break;
     default:
@@ -64,6 +67,14 @@ int Menu::mostrarPrincipal() {
 }
 
 void Menu::mostrarCreditos() { std::cout << CREDITOS; }
+
+void Menu::asignarTablero() {
+  Algoritmos algoritmos = Algoritmos();
+  std::cout << "Ingrese los valores: " << std::endl;
+  vector<int> tablero(9);
+  for (int i = 0; i < 9; i++) std::cin>>tablero[i];
+  algoritmos.asignarTablero(tablero);
+}
 
 // --------------------------------------
 // -------------ALGORITMOS---------------
