@@ -16,16 +16,16 @@
 #include <string>
 
 #define OPCIONES_PRINCIPAL     \
-  "╔═══════════════════════╗\n"\
-  "║    Menú Principal     ║\n"\
-  "║ 1. Ancho Primero      ║\n"\
-  "║ 2. Greedy             ║\n"\
-  "║ 3. Solucionador IDS   ║\n"\
-  "║ 4. IDS Heuristica     ║\n"\
-  "║ 5. Generar tablero    ║\n"\
-  "║ 6. Créditos           ║\n"\
-  "║ 7. Salir              ║\n"\
-  "╚═══════════════════════╝\n"\
+  "╔═════════════════════════════════╗\n"\
+  "║          Menú Principal         ║\n"\
+  "║ 1. Ancho Primero                ║\n"\
+  "║ 2. Ancho Primero con Heuristica ║\n"\
+  "║ 3. Solucionador IDS             ║\n"\
+  "║ 4. IDS Heuristica               ║\n"\
+  "║ 5. Generar tablero              ║\n"\
+  "║ 6. Créditos                     ║\n"\
+  "║ 7. Salir                        ║\n"\
+  "╚═════════════════════════════════╝\n"\
   "Seleccione una opción: "
 
 

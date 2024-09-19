@@ -19,16 +19,16 @@ void Menu::run() {
     opcion = mostrarPrincipal();
     switch (opcion) {
     case 1:
-      std::cout << "Ancho " << std::endl;
+      std::cout << "Ancho primero" << std::endl;
       algoritmos.anchoPrimero();
       break;
     case 2:
-      std::cout << "Greedy" << std::endl;
-      algoritmos.greedy();
+      std::cout << "Ancho primero heuristica" << std::endl;
+      algoritmos.anchoPrimeroHeuristica();
       break;
     case 3:
       std::cout << "Solucionador IDS" << std::endl;
-      algoritmos.solucionadorIDS();
+      algoritmos.ids();
       break;
     case 4:
       std::cout << "IDS Heuristica" << std::endl;

@@ -22,6 +22,7 @@ class Algoritmos {
   vector<vector<int>> posiblesMovimientos(const vector<int>&);
 
   int heuristicaManhattan(const vector<int>& movimientoActual);
+  bool dls(vector<int>& estado, int limite);
 
  public:
   Algoritmos();
@@ -30,16 +31,14 @@ class Algoritmos {
   void printBoard();
   
   // Auxiliares
-  int iterativeDeepeningDfs(vector<int> estado, set<vector<int>> &visitados, int depth);
   int idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
                              std::set<std::vector<int>> visitados,
                              int costo, int limite);
 
-
   // Algoritmos
   bool anchoPrimero();
-  bool greedy();
-  void solucionadorIDS();
+  bool anchoPrimeroHeuristica();
+  void ids();
   void IDSHeuristica();
 
 };

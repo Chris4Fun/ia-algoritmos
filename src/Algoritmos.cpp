@@ -81,7 +81,7 @@ bool Algoritmos::anchoPrimero() {
         vector<int> siguiente = frontera.front();
         frontera.pop();
         vector<vector<int>> movimientos = posiblesMovimientos(siguiente);
-        for (auto movimiento : movimientos) {
+        for (auto &movimiento : movimientos) {
             // Revisar si alguno de los movimientos lleva al objetivo
             if (movimiento == objetivo) {
                 auto t2 = std::chrono::high_resolution_clock::now();
@@ -101,7 +101,7 @@ bool Algoritmos::anchoPrimero() {
     return false;
 }
 
-bool Algoritmos::greedy() {
+bool Algoritmos::anchoPrimeroHeuristica() {
     // Inicia el contador:
     auto t1 = std::chrono::high_resolution_clock::now();
     // Revisar si estado inicial es solucion:
@@ -125,7 +125,7 @@ bool Algoritmos::greedy() {
         vector<int> siguiente = frontera.top();
         frontera.pop();
         vector<vector<int>> movimientos = posiblesMovimientos(siguiente);
-        for (auto movimiento : movimientos) {
+        for (auto &movimiento : movimientos) {
             // Revisar si alguno de los movimientos lleva al objetivo
             if (movimiento == objetivo) {
                 auto t2 = std::chrono::high_resolution_clock::now();
@@ -145,53 +145,35 @@ bool Algoritmos::greedy() {
     return false;
 }
 
-int Algoritmos::iterativeDeepeningDfs(vector<int> estado, set<vector<int>> &visitados, int depth) {
-	if(depth == 0) {
-		return false;
-	}
 
-	// Reviso si el estado actual es una solucion
-	if(estado == objetivo) {
-		return true;
-	}
-
-	// Añado este estado no visitado a los nodos visitados
-	visitados.insert(estado);
-
-	// Obtener los movimientos posibles
-	vector<vector<int>> movimientos = posiblesMovimientos(estado);
-
-	int resultado = false;
-	// Itero por los posibles movimientos revisando si ya ha sido visitado ese nodo.
-	for(auto movimiento : movimientos) {
-		if(visitados.find(movimiento) == visitados.end()) {
-			resultado = iterativeDeepeningDfs(movimiento, visitados, depth - 1);
-			if(resultado) {
-				return resultado;
-			}
-		}
-	}
-
-	return resultado;
+bool Algoritmos::dls(vector<int>& estado, int limite) {
+    if (estado == objetivo) return true;
+    if (limite == 0) return false;
+    vector<vector<int>> movimientos = posiblesMovimientos(estado);
+    for (auto &movimiento : movimientos) {
+        if (dls(movimiento, limite-1)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-void Algoritmos::solucionadorIDS() {
-    int encontroSolucion = 0;
-	int depth = 1;
-	auto t1 = std::chrono::high_resolution_clock::now();
-	while(!encontroSolucion) {
-		set<vector<int>> visitados;
-		encontroSolucion = iterativeDeepeningDfs(tablero, visitados, depth);
-		++depth;
-	}
-	auto t2 = std::chrono::high_resolution_clock::now();
+void Algoritmos::ids () {
+    auto t1 = std::chrono::high_resolution_clock::now();
+    // Numero de movimientos puede llegar a ser 31
+    const int profundidadMaxima = 32;
+    for (int i = 0; i <= profundidadMaxima; i++) {
+        if (dls(tablero,i)) {
+            auto t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+            std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
+            return;
+        }
+    }
+    // Si llega aqui, no se encontro solucion
+    auto t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-
-	if(encontroSolucion) {
-		std::cout << "Se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
-	} else {
-		std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
-	}
+    std::cout << "No se encontro la solucion. Duracion: " << ms_double.count() << "ms\n";
 }
 
 int Algoritmos::idsHeuristicaAuxiliar(std::vector<int> estadoActual, 
@@ -218,7 +200,7 @@ int Algoritmos::idsHeuristicaAuxiliar(std::vector<int> estadoActual,
 
   int minOverThreshold = INT_MAX;
 
-  for (auto movimiento : movimientos) {
+  for (auto &movimiento : movimientos) {
     if (visitados.find(movimiento) == visitados.end()) {
       int resultado = idsHeuristicaAuxiliar(movimiento, visitados, costo+1,
                                             limite);
