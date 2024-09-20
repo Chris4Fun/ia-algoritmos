@@ -188,11 +188,11 @@ void Algoritmos::ids () {
 // --- IDS* ---
 
 int Algoritmos::heuristica(const vector<int>& movimiento) {
-    int correctos = 0;
+    int incorrectos = 0;
     for (int i = 0; i < 9; i++) {
-        if (movimiento[i] != objetivo[i]) correctos++;
+        if (movimiento[i] != objetivo[i]) incorrectos++;
     }
-    return correctos;
+    return incorrectos;
 }
 
 bool Algoritmos::dlsHeuristica(vector<int>& estado, int& costoMinimo, int limite) {
