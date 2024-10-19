@@ -6,7 +6,7 @@ def conflictos(tablero):
     n = len(tablero)
     for i in range(n):
         for j in range(i+1, n):
-            # Si estan en la misma fila o en la misma diagonal
+            # Si estan en la misma columna o en la misma diagonal hay un conflicto
             if (tablero[i] == tablero[j]) or (abs(tablero[i]-tablero[j]) == abs(i-j)):
                 conflictos += 1
     return conflictos
@@ -23,7 +23,7 @@ def movimientos(tablero):
             movimientos.append(vecino)
     return movimientos
 
-# Imprimir el tablero 
+# Imprime el tablero 
 def imprimir_tablero(tablero):
     print(f"Numero de conflictos: {conflictos(tablero)}")
     n = len(tablero)
