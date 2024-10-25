@@ -32,6 +32,7 @@ class Viajero:
         self.ruta = []
         self.visitado = set()
 
+
 def evaluar_ruta(viajero, ciudades):
     viajero.reset()
     entregas = 0
@@ -41,7 +42,7 @@ def evaluar_ruta(viajero, ciudades):
                 entregas += ciudad.demanda
     return entregas
 
-def impirmir(ciudades, entregas):
+def imprimir(ciudades, entregas):
     print(f"Entrgas optimizadas: {entregas}")
     for ciudad in ciudades:
         print(ciudad.nombre)

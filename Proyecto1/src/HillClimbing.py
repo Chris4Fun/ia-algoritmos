@@ -34,7 +34,7 @@ def hill_climbing_n_reinas(tablero):
 # Hill Climbing para resolver el problema del viajero
 def hill_climbing_viajero(agente, ciudades):
     mejor_entregas = viajero.evaluar_ruta(agente, ciudades)
-    print(f"Entrgas iniciales: {mejor_entregas}")
+    print(f"Entregas iniciales: {mejor_entregas}")
     
     while True:
         nuevas_rutas = viajero.cambios_ruta(ciudades)
@@ -97,7 +97,7 @@ def n_distribucion(tiempos_maquina_1, tiempos_maquina_2):
 def n_viajero(agente, ciudades):
     mejor_ruta, mejor_entregas = hill_climbing_viajero(agente, ciudades)
     print("\nSolución final:")
-    viajero.impirmir(mejor_ruta, mejor_entregas)
+    viajero.imprimir(mejor_ruta, mejor_entregas)
 
 ciudades = [
     viajero.Ciudad("A", "recolectar", suministra = 10),
