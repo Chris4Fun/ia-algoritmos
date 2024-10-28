@@ -1,31 +1,16 @@
-import random
-from collections import OrderedDict
 
 # Import necessary modules for each problem
 import Distribucion as dist
 import NReinas as reinas
 import Viajero as viajero
 
-# Genetic Algorithm for N-Queens Problem
-def genetic_n_reinas(n, num_generations=50, tamano_poblacion=10, probabilidad_mutacion=0.1):
-    poblacion = [random.sample(range(n), n) for _ in range(tamano_poblacion)]
-    
-    for _ in range(num_generations):
-        padre1, padre2 = seleccion(poblacion, problem='n_reinas', n=n)
-        hijo = cruzamiento_reinas(padre1, padre2)
-        mutacion_reinas(hijo, probabilidad_mutacion)
-        reemplazar_hijo(hijo, poblacion, problem='n_reinas', n=n)
-    
-    mejor_solucion = obtener_mejor(poblacion, problem='n_reinas', n=n)
-    conflictos = reinas.conflictos(mejor_solucion)
-    
-    print("\nSolución final para N-Reinas con algoritmo genético:")
-    reinas.imprimir_tablero(mejor_solucion)
-    print(f"Conflictos: {conflictos}")
-    return mejor_solucion
+# Import each genetic algorithmm
+from Genetic.GeneticDist import *
+from Genetic.GeneticReinas import *
+from Genetic.GeneticViaj import *
 
 # Genetic Algorithm for the Traveling Salesperson Problem
-def genetic_viajero(agente, ciudades, num_generations=2, tamano_poblacion=10, probabilidad_mutacion=0.1):
+def genetic_viajero(agente, ciudades, num_generations=50, tamano_poblacion=10, probabilidad_mutacion=0.1):
     mejor_entregas = viajero.evaluar_ruta(agente, ciudades)
     print(f"Entregas iniciales: {mejor_entregas}")
     # Initialize population with actual 'Ciudad' objects, not indices
@@ -115,12 +100,7 @@ def reemplazar_hijo(hijo, poblacion, problem, **kwargs):
 
 # Separate functions to calculate the fitness (razón) for each problem
 
-def calcular_razon_n_reinas(individuo, **kwargs):
-    n = kwargs.get('n')
-    max_conflictos = n * (n - 1) / 2  # Máximo número de conflictos posibles
-    conflictos = reinas.conflictos(individuo)
-    fitness = max_conflictos - conflictos  # Queremos minimizar conflictos
-    return fitness
+
 
 def calcular_razon_distribucion(individuo, **kwargs):
     tiempos_maquina_1 = kwargs.get('tiempos_maquina_1')
@@ -143,21 +123,7 @@ def seleccion(poblacion, problem, **kwargs):
     
     return poblacion_ordenada[0], poblacion_ordenada[1]
 
-# Cruzamiento y mutación para N-Reinas
-def cruzamiento_reinas(padre1, padre2):
-    punto_corte = random.randint(1, len(padre1) - 2)
-    hijo = padre1[:punto_corte] + padre2[punto_corte:]
-    # Resolver duplicados
-    hijo = list(OrderedDict.fromkeys(hijo))
-    faltantes = [i for i in range(len(padre1)) if i not in hijo]
-    hijo.extend(faltantes)
-    return hijo
 
-def mutacion_reinas(individuo, probabilidad_mutacion):
-    if random.random() <= probabilidad_mutacion:
-        # Swap two random indices in the individual (solution)
-        i, j = random.sample(range(len(individuo)), 2)
-        individuo[i], individuo[j] = individuo[j], individuo[i]
 
 # Cruzamiento y mutación para Viajero (Travelling Salesperson Problem)
 def cruzamiento_viajero(padre1, padre2):
@@ -202,7 +168,10 @@ def mutacion_distribucion(individuo, probabilidad_mutacion):
 # Example usage of the Genetic Algorithm for each problem
 
 def n_reinas(n):
-    genetic_n_reinas(n)
+    mejor_solucion, conflictos = genetic_n_reinas(n)
+    print("\nSolución final para N-Reinas con algoritmo genético:")
+    reinas.imprimir_tablero(mejor_solucion)
+    print(f"Conflictos: {conflictos}")
 
 def n_distribucion(tiempos_maquina_1, tiempos_maquina_2):
     genetic_distribucion(tiempos_maquina_1, tiempos_maquina_2)
@@ -227,6 +196,6 @@ tiempos_maquina_1 = [2, 6, 3, 4, 2]
 tiempos_maquina_2 = [7, 2, 5, 3, 6]
 
 # Run Genetic Algorithms
-n_viajero(agente, ciudades)
+#n_viajero(agente, ciudades)
 #n_distribucion(tiempos_maquina_1, tiempos_maquina_2)
-#n_reinas(8)
+n_reinas(8)
