@@ -72,6 +72,5 @@ def obtener_mejor(poblacion, time_1, time_2):
 def calcular_razon_distribucion(individuo, time_1, time_2):
     makespan = dist.calcular_tiempos(individuo, time_1, time_2)
     max_time = sum(time_1) + sum(time_2)
-    print(max_time)
     fitness = max_time - sum(makespan)
     return fitness
