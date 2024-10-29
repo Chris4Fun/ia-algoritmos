@@ -18,7 +18,7 @@ def genetic_n_reinas(n, num_generations=50, population_size=10, mutation_prob=0.
     
     return mejor_solucion,  conflictos
 
-# Operadores del algoritmo
+# Operadores para Reinas
 
 def seleccion(poblacion, n):
     poblacion_ordenada = sorted(poblacion, key=lambda ind: calcular_razon_n_reinas(ind, n), reverse=True)

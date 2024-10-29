@@ -43,7 +43,7 @@ def evaluar_ruta(viajero, ciudades):
     return entregas
 
 def imprimir(ciudades, entregas):
-    print(f"Entrgas optimizadas: {entregas}")
+    print(f"Entregas optimizadas: {entregas}")
     for ciudad in ciudades:
         print(ciudad.nombre)
 

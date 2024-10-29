@@ -67,7 +67,7 @@ def hill_climbing_n_distribucion(tiempos_maquina_1, tiempos_maquina_2):
         for vecino in cambios:
             nuevo_tiempo = dist.calcular_tiempos(vecino, tiempos_maquina_1, tiempos_maquina_2)
             tiempos.append(nuevo_tiempo)
-
+        
         mejor_tiempo = min(tiempos)
         mejor_asignacion = cambios[tiempos.index(mejor_tiempo)]
 
