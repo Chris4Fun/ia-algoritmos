@@ -28,6 +28,6 @@ def imprimir_tablero(tablero):
     print(f"Numero de conflictos: {conflictos(tablero)}")
     n = len(tablero)
     for i in range(n):
-        fila = ['.'] * n
+        fila = ['-'] * n
         fila[tablero[i]] = 'R'
         print(' '.join(fila))
