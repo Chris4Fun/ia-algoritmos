@@ -2,7 +2,7 @@
 import random
 
 def primera_asignacion(tiempos_maquina_1, tiempos_maquina_2):
-    return random.sample(range(5), 5)
+    return random.sample(range(len(tiempos_maquina_1)), len(tiempos_maquina_1))
 
 def calcular_tiempos(asignacion_actual, tiempos_maquina_1, tiempos_maquina_2):
     final_tiempo_1 = 0
